@@ -1,4 +1,3 @@
-using System;
 using Chill;
 using FluentAssertions;
 using PaymentTerminal;
@@ -15,7 +14,7 @@ namespace PaymentTermina.Tests.BDD
             public WhenWithdrawMoneyFromCard()
             {
                 Given(() =>
-                    _creditCard = new CreditCard(Money.From(50), Pin.From("1234"), DateTime.Now.AddYears(1)));
+                    _creditCard = new CreditCard(Money.From(50), Pin.From("1234")));
                 When(() => Subject.WithdrawMoney(_creditCard, Money.From(5), Pin.From("1234")));
             }
 

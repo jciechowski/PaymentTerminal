@@ -5,28 +5,25 @@ namespace PaymentTerminal
 {
     public class CreditCard
     {
-        public Money Balance { get; private set; }
-        public DateTime ExpireAt { get; }
+        private Money Balance { get; set; }
         private Pin Pin { get; }
 
         public CreditCard(
             Money balance,
-            Pin pin,
-            DateTime expireAt)
+            Pin pin)
         {
             Balance = balance;
             Pin = pin;
-            ExpireAt = expireAt;
         }
 
-        private bool VerifyPin(Pin pin)
+        private bool PinVerified(Pin pin)
         {
             return pin == Pin;
         }
 
         private void ChangeBalance(Pin pin, Money newBalance)
         {
-            if (VerifyPin(pin))
+            if (PinVerified(pin))
             {
                 Balance = newBalance;
             }
@@ -44,7 +41,7 @@ namespace PaymentTerminal
 
         public void Charge(Money chargeAmount, Pin creditCardPin)
         {
-            var pinIsCorrect = VerifyPin(creditCardPin);
+            var pinIsCorrect = PinVerified(creditCardPin);
 
             if (!pinIsCorrect)
             {

@@ -14,7 +14,7 @@ namespace PaymentTermina.Tests.BDD
 
             public WhenRefundWasRequested()
             {
-                Given(() => _creditCard = new CreditCard(Money.From(50), Pin.From("1234"), DateTime.Now.AddYears(1)));
+                Given(() => _creditCard = new CreditCard(Money.From(50), Pin.From("1234")));
 
                 When(() =>
                 {
