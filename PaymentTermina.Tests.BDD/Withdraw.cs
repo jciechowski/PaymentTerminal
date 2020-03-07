@@ -14,19 +14,21 @@ namespace PaymentTermina.Tests.BDD
 
             public WhenWithdrawMoneyFromCard()
             {
-                Given(() => 
+                Given(() =>
                     _creditCard = new CreditCard(Money.From(50), Pin.From("1234"), DateTime.Now.AddYears(1)));
-                When(() =>
-                {
-                    Subject.WithdrawMoney(_creditCard, Money.From(5), Pin.From("1234"));
-                    return _creditCard.GetBalance(Pin.From("1234"));
-                });
+                When(() => Subject.WithdrawMoney(_creditCard, Money.From(5), Pin.From("1234")));
             }
 
             [Fact]
             public void ThenCreditCardWasCharged()
             {
-                Result.Should().Be(Money.From(45));
+                _creditCard.GetBalance(Pin.From("1234")).Amount.Should().Be(Money.From(45).Amount);
+            }
+
+            [Fact]
+            public void ThenMoneyWasReturned()
+            {
+                Result.Should().Be(Money.From(5));
             }
         }
     }

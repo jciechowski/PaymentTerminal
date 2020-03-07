@@ -5,7 +5,7 @@ namespace PaymentTerminal
 {
     public class CreditCard
     {
-        public Money Balance { get; }
+        public Money Balance { get; private set; }
         public DateTime ExpireAt { get; }
         private Pin Pin { get; }
 
@@ -19,9 +19,17 @@ namespace PaymentTerminal
             ExpireAt = expireAt;
         }
 
-        public bool VerifyPin(Pin pin)
+        private bool VerifyPin(Pin pin)
         {
             return pin == Pin;
+        }
+
+        private void ChangeBalance(Pin pin, Money newBalance)
+        {
+            if (VerifyPin(pin))
+            {
+                Balance = newBalance;
+            }
         }
 
         public Money GetBalance(Pin pin)
@@ -34,7 +42,7 @@ namespace PaymentTerminal
             throw new UnauthorizedAccessException();
         }
 
-        public CreditCard Charge(Money chargeAmount, Pin creditCardPin)
+        public void Charge(Money chargeAmount, Pin creditCardPin)
         {
             var pinIsCorrect = VerifyPin(creditCardPin);
 
@@ -49,8 +57,13 @@ namespace PaymentTerminal
             }
 
             var newBalance = Balance - chargeAmount;
-            
-            return new CreditCard(newBalance, Pin, ExpireAt);
+
+            ChangeBalance(creditCardPin, newBalance);
+        }
+
+        public void AddToBalance(Money refundAmount)
+        {
+            ChangeBalance(Pin, Balance + refundAmount);
         }
     }
 }

@@ -5,42 +5,49 @@ namespace PaymentTerminal
 {
     public class Terminal
     {
-        // charge card
+        // D. charge card
         // refund to card
-        // withdraw from card
+        // D. withdraw from card
         // gsm top-up
         // blik
         // NFC
         // contact less payment with card
-        public void WithdrawMoney(
+        public Money WithdrawMoney(
             CreditCard creditCard,
             Money amountToWithdraw,
             Pin pin)
         {
             var creditCardBalance = creditCard.GetBalance(pin);
 
-            if (creditCardBalance < amountToWithdraw)
+            if (creditCardBalance > amountToWithdraw)
             {
-                throw new ArgumentOutOfRangeException();
+                creditCard.Charge(amountToWithdraw, pin);
+
+                return amountToWithdraw;
             }
 
-            // creditCard.
+            throw new ArgumentOutOfRangeException();
         }
 
-        public CreditCard Charge(
+        public void Charge(
             CreditCard creditCard,
             Pin creditCardPin,
             Money chargeAmount)
         {
             var creditCardBalance = creditCard.GetBalance(creditCardPin);
+
             if (creditCardBalance > chargeAmount)
             {
-                var chargedCreditCard = creditCard.Charge(chargeAmount, creditCardPin);
-
-                return chargedCreditCard;
+                creditCard.Charge(chargeAmount, creditCardPin);
+                return;
             }
 
             throw new ArgumentOutOfRangeException();
+        }
+
+        public void Refund(CreditCard creditCard, Money refundAmount)
+        {
+            creditCard.AddToBalance(refundAmount);
         }
     }
 }
